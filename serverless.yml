@@ -1,0 +1,24 @@
+# Welcome to Serverless!
+#
+# For full config options, check the kubeless plugin docs:
+#    https://github.com/serverless/serverless-kubeless
+#
+# For documentation on kubeless itself:
+#    http://kubeless.io
+
+# Update the service name below with your own service name
+service: myapi
+
+provider:
+  name: kubeless
+  runtime: python2.7
+  
+plugins:
+  - serverless-kubeless
+
+functions:
+  get-post:
+    environment:
+        DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+        AWS_DEFAULT_REGION: us-east-1
+    handler: get_post.get_post
