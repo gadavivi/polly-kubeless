@@ -22,3 +22,6 @@ functions:
         DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
         AWS_DEFAULT_REGION: us-east-1
     handler: get_post.get_post
+    events:
+      - http:
+          path: /get-post
