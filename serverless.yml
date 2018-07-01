@@ -7,6 +7,7 @@
 #    http://kubeless.io
 
 # Update the service name below with your own service name
+# TODO: add the required aws permission automaticlly...
 service: myapi
 
 provider:
@@ -21,7 +22,25 @@ functions:
     environment:
         DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
         AWS_DEFAULT_REGION: us-east-1
-    handler: get_post.get_post
+    handler: src/get_post.get_post
     events:
       - http:
           path: /get-post
+
+  new-post:
+    environment:
+        DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+        AWS_DEFAULT_REGION: us-east-1
+    handler: src/new_post.new_post
+    events:
+      - http:
+          path: /new-post
+
+  convert-to-video:
+    environment:
+        DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+        AWS_DEFAULT_REGION: us-east-1
+        BUCKET_NAME: ${self:service}-mp3-bucket
+    handler: src/convert_to_video.convert_to_video
+    events:
+      - trigger: 'new-post'
